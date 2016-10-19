@@ -1,79 +1,6 @@
-Report
 
-This report consists of three part:
-Part 1: Summary of Test Accuracy 
-    Gives the test result (Precision, Recall and f1-score) after performing Task 1 and Task 2 required in the homework description. 
-Part 2: Summary of Pythone Scripts
-    Gives a description of the python scripts created in this homework, including parameters it takes and what it does for each script.
-Part 3: Summary of Commands
-    Summarizes all the commands that are used in this homework. Go through all the commands can reproduce all the outputs. But it can be ignored if you are not checking every step. 
-
-
-
-
-
------------------------Part 1: Summary of Test Accuracy-----------------------------------
----------Task 1: 75% Training, 25% Testing-------------------------------
-
-Sentiment:
-	            NB	        SVM	        MegaM
-Precision(Pos)	0.8715	    0.8601	    0.8749
-Precision(Neg)	0.8326	    0.8811	    0.8768
-Recall(Pos)	    0.8117	    0.8828	    0.8754
-Recall(Neg)	    0.8816	    0.8510	    0.8762
-F1(Pos)	        0.8405	    0.8713	    0.8752
-F1(Neg)	        0.8527	    0.8694	    0.8765
-
-Spam:
-	            NB	        SVM	        MegaM
-Precision(Pos)	0.9781	    0.9326	    0.9680
-Precision(Neg)	0.9895	    0.9886	    0.9898
-Recall(Pos)	    0.9901	    0.9898	    0.9905
-Recall(Neg)	    0.9767	    0.9252	    0.9657
-F1(Pos)	        0.9841	    0.9603	    0.9776
-F1(Neg)	        0.9831	    0.9559	    0.9784
-
-Analysis:
-    In Sentiment case, MegaM performs the best.
-    In Spam case, Naive Bayes performs the best.
-    The reason may be that in spam dataset, the assumption of Naive Bayes, which is the independence of the features, is better satisfied. While in Sentiment dataset, the features are more related to each other, thus MegaM gives a better estimation in dependent cases, since it is a discriminative model and try to learn the conditional probability directly.
-    Performance in spam detectino is much better than sentiment analysis.
-
-
----------Task 2: 25% Training, 75% Testing-----------------------------
-
-Sentiment:
-	            NB	        SVM	        MegaM
-Precision(Pos)	0.8590	    0.8305	    0.8431
-Precision(Neg)	0.8203	    0.8636	    0.8669
-Recall(Pos)	    0.8087	    0.8692	    0.8705
-Recall(Neg)	    0.8680	    0.8235	    0.8390
-F1(Pos)	        0.8331	    0.8494	    0.8566
-F1(Neg)	        0.8434	    0.8431	    0.8527
-
-Spam:
-	            NB	        SVM	        MegaM
-Precision(Pos)	0.9782	    0.9096	    0.9704
-Precision(Neg)	0.9822	    0.9878	    0.9861
-Recall(Pos)	    0.9826	    0.9891	    0.9866
-Recall(Neg)	    0.9777	    0.8999	    0.9693
-F1(Pos)	        0.9804	    0.9477	    0.9784
-F1(Neg)	        0.9800	    0.9418	    0.9776
-
-Analysis:
-    NB:     Dropped about 1% in sentiment analysis, and about 0.3% in spam detection
-    SVM:    Dropped about 2% in sentiment analysis, and about 1.5% in spam detection
-    MegaM:  Dropped about 2% in sentiment analysis, and no significant difference in spam detection
-    In sentiment analysis, Naive Bayes is the most robust model. In spam detection, MegaM is the most robust.
-    Drop of accuracy is less in spam detection than that in sentiment analysis.
-
-
-
-
-
-
-
-----------------------Part 2: Summary of Python Scripts-----------------------------------    
+———————————————————————————Summary of Python Scripts———————————————————
+——data preprocessing—— 
 1. enron_preprocess.py  (train_PDF, test_PDF)
    Preprocessing enron data into Projct Data Format. The labeled data are transformed into the train_PDF file. The unlabeled testing data are transformed into the test_PDF file. Directories that contains spam files ('./enron1/spam', './enron2/spam', './enron4/spam', './enron5/spam'), ham files ('./enron1/ham', './enron2/ham', './enron4/ham', './enron5/ham') and test files ('./spam_or_ham_test') are hard coded in the script. Directories 'enron1', 'enron2', 'enron4', 'enron5' and 'spam_or_ham_test' should be placed in the same directory as the script
    
@@ -88,22 +15,24 @@ Analysis:
    
 5. preprocess_mega.py   (train_PDF, train_mega, test_PDF, test_mega)
    Transform training and testing data in PDF into MegaM required format. For training data, transform POSITIVE/NEGATIVE label to 1/0. For test data, add +1 as an arbitrary label at the beginning of each line. For both training and test data, replace the ':' between feature and value with a blank space.
-   
-6. nblearn.py   (trainingfile, modelfile)
-   As specified in the homework description.
+
+6. trans_label.py   (numeric_label, alphabetic_label, dataname)
+   Transform numeric label (output from SVM-Light or MegaM) to alphabetic label: if numeric label > 0 -> POSITIVE/SPAM, else -> NEGATIVE/HAM. Parameter 'dataname' takes value 'imdb' or 'email'. If dataname = 'imdb', it converts numeric label to POSITIVE/NEGATIVE. If dataname = 'email', it converts numberic label to SPAM/HAM.
+
+——Naive Bayes model training—— 
+1. nblearn.py   (trainingfile, modelfile)
+   Generate modelfIne from training file
    modelfile: 1st line: dataname ('imdb' or 'email')
               2nd line: P(POSITIVE)
               3rd line: P(NEGATIVE)
               4th line: [P(feature(i)|POSITIVE)]
               5th line: [P(feature(i)|NEGATIVE)]
    
-7. nbclassify.py   (modelfile, testfile)
-   As specified in the homework description.
+2. nbclassify.py   (modelfile, testfile)
+   Do classification on test file using model file
 
-8. trans_label.py   (numeric_label, alphabetic_label, dataname)
-   Transform numeric label (output from SVM-Light or MegaM) to alphabetic label: if numeric label > 0 -> POSITIVE/SPAM, else -> NEGATIVE/HAM. Parameter 'dataname' takes value 'imdb' or 'email'. If dataname = 'imdb', it converts numeric label to POSITIVE/NEGATIVE. If dataname = 'email', it converts numberic label to SPAM/HAM. 
-
-9. evaluation.py    (true_label, predict_label)
+——Result processing—
+1. evaluation.py    (true_label, predict_label)
    Compares the predict_label with true_label. Output the precision, recall, f1 score and accuracy.
 
 
@@ -111,9 +40,8 @@ Analysis:
 
 
     
-    
-----------------------------Part 3: Summary of Commands-----------------------------------------
--------------Data Preprocessing----------------
+—————————————————————————————Summary of Commands———————————————————————
+———Data Preprocessing——
 1.Convert data into project format.
     Sentiment:        
         $ python3 imdb_preprocess.py labeledBow.feat imdb_formatted
@@ -129,8 +57,7 @@ Analysis:
         $ python3 split_data.py enron_formatted enron_trainT1 enron_testT1 enron_labelT1 0.75
         $ python3 split_data.py enron_formatted enron_trainT2 enron_testT2 enron_labelT2 0.25
       
----------------Task 1 -------------------------
-Use 75% of labeled data for training and 25% for testing and report accuracy.
+———————75% training 25% testing———————
 1.Sentiment:
     a.Naive Bayes
         Command:
@@ -225,8 +152,7 @@ Use 75% of labeled data for training and 25% for testing and report accuracy.
             f1(Neg) = 0.9776286353467561
             Accuracy = 0.9783822734642407
     
-----------------Task 2 -----------------------------------
-Use 25% of labeled data for training and 75% for testing and report accuracy.
+———————25% training 75% testing———————
 1.Sentiment:
     a.Naive Bayes
         Command:
@@ -321,42 +247,7 @@ Use 25% of labeled data for training and 75% for testing and report accuracy.
             f1(Pos) = 0.9784019827687949
             f1(Neg) = 0.9776283618581907
             Accuracy = 0.978021978021978
-              
------------------Task 3 -----------------------------------------------------------    
-Create model using whole dataset and output predict results.
-1.Sentiment:
-    a.Naive Bayes
-            $ python3 nblearn.py imdb_formatted sentiment.nb.model
-            $ python3 nbclassify.py sentiment.nb.model sentiment_test_formatted > sentiment.nb.out
-    
-    b.SVM-Light
-            $ python3 preprocess_svm.py imdb_formatted sentiment_svm_train sentiment_test_formatted sentiment_svm_test
-            $ ./svm_learn sentiment_svm_train sentiment.svm.model
-            $ ./svm_classify sentiment_svm_test sentiment.svm.model sentiment_svm_output
-            $ python3 trans_label.py sentiment_svm_output sentiment.svm.out imdb
-    
-    c.MegaM
-            $ python3 preprocess_mega.py imdb_formatted sentiment_mega_train sentiment_test_formatted sentiment_mega_test
-            $ ./megam_i686.opt -fvals binary sentiment_mega_train > sentiment.megam.model
-            $ ./megam_i686.opt -fvals -predict sentiment.megam.model binary sentiment_mega_test > sentiment_mega_output
-            $ python3 trans_label.py sentiment_mega_output sentiment.megam.out imdb
-      
-2.Spam:
-    a.Naive Bayes
-            $ python3 nblearn.py enron_formatted spam.nb.model
-            $ python3 nbclassify.py spam.nb.model spam_test_formatted > spam.nb.out
-    
-    b.SVM-Light
-            $ python3 preprocess_svm.py enron_formatted spam_svm_train spam_test_formatted spam_svm_test
-            $ ./svm_learn spam_svm_train spam.svm.model
-            $ ./svm_classify spam_svm_test spam.svm.model spam_svm_output
-            $ python3 trans_label.py spam_svm_output spam.svm.out email
-    
-    c.MegaM
-            $ python3 preprocess_mega.py enron_formatted spam_mega_train spam_test_formatted spam_mega_test
-            $ ./megam_i686.opt -fvals binary spam_mega_train > spam.megam.model
-            $ ./megam_i686.opt -fvals -predict spam.megam.model binary spam_mega_test > spam_mega_output
-            $ python3 trans_label.py spam_mega_output spam.megam.out email
+
       
     
 
