@@ -1,3 +1,12 @@
+Tasks:
+1. Spam/Ham classification on Enron email data
+2. Sentiment classification on imdb data
+
+Comparing methods:
+1. Naive Bayes
+2. SVM
+3. Maximum Entropy Model
+
 
 ———————————————————————————Summary of Python Scripts———————————————————
 ——data preprocessing—— 
