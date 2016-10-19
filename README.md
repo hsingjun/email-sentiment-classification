@@ -1,4 +1,4 @@
-CSCI544 HW2 Report
+Report
 
 This report consists of three part:
 Part 1: Summary of Test Accuracy 
